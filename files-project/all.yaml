@@ -1,0 +1,80 @@
+#ku api-resources coming apiVersion
+#ku api-versions coming apiVersion
+#ku get pods -o jsonpath='{.items[*].metadata.name}'
+#ku get pods -o jsonpath='{.items[*].metadata.name}' --sort-by=.metadata.name
+#ku get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'
+#ku explain pods.metadata (under what ever showing console)
+
+---
+apiVersion: v1                       
+kind: Pod                            
+metadata:                                    
+  labels:                            
+    run: flask-app                   
+  name: flask-app                    
+  namespace: bravo                   
+spec:                                
+  containers:                        
+  - image: rajnages/my-flask-app     
+    name: flask-app 
+
+---
+
+apiVersion: v1                       
+kind: Pod                            
+metadata:                                    
+  labels:                            
+    run: flask-app                   
+  name: flask-app                    
+  namespace: alpha                   
+spec:                                
+  containers:                        
+  - image: rajnages/my-flask-app     
+    name: flask-app
+
+     
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-app
+  namespace: alpha
+spec:
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: flask-app
+  type: LoadBalancer
+
+  kubectl expose pod flask-app --port=8000 --target-port=80 --type=LoadBalancer -n alpha
+
+cat <<EOF > replicaset.yaml
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: flask-app
+  labels:
+    app: flask-app
+    tier: flask-app
+spec:
+  # modify replicas according to your case
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: flask-app
+  template:
+    metadata:
+      labels:
+        tier: flask-app
+    spec:
+      containers:
+      - name: flask-app
+        image: rajnages/my-flask-app
+EOF
+
+ku apply -f replicaset.yaml
+
+
+      
