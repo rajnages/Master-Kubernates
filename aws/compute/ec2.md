@@ -1,7 +1,8 @@
 # Compute Services
 ## EC2
-Virtual servers in the cloud that provide resizable compute capacity
-Use cases:
+Amazon EC2 (Elastic Compute Cloud) is a web service that provides resizable compute capacity in the cloud. It allows you to run virtual servers, known as instances, on-demand, making it easier to scale computing resources based on your needs.
+
+# Use cases:
 - Web application hosting and serving
 - Development/test environments
 - Gaming servers
@@ -9,7 +10,7 @@ Use cases:
 - High-performance computing
 - Enterprise applications
 
-Key features:
+# Key features:
 - Choose from various instance types optimized for different use cases
 - Multiple purchasing options (On-Demand, Reserved, Spot instances)
 - Integrated with VPC for networking security
@@ -18,7 +19,7 @@ Key features:
 - Load balancing support
 - Rich monitoring via CloudWatch
 
-Why choose EC2:
+# Why choose EC2:
 - Complete control over computing resources
 - Flexible configuration options for CPU, memory, storage and networking
 - Pay only for what you use with per-second billing
@@ -28,6 +29,13 @@ Why choose EC2:
 
 ## Auto Scaling
 Automatically adjusts compute capacity to maintain application availability
+
+# Vertical Scaling (Scaling Up)
+    - Meaning: Vertical scaling refers to increasing the resources (CPU, RAM, storage, etc.) of a single machine or server to handle more load. This is done by upgrading the hardware of the existing server.
+    - Example: If your application runs on a server with 2 CPU cores and 8GB RAM, vertical scaling would involve upgrading the server to one with 4 CPU cores and 16GB of RAM to handle increased traffic or workload.
+# Horizontal Scaling (Scaling Out)
+    - Meaning: Horizontal scaling refers to adding more servers or machines to a pool of resources, distributing the load across multiple machines or instances. This approach involves increasing the number of servers rather than upgrading the existing ones.
+    - Example: Instead of upgrading a single server, you add more servers to a cluster. For example, if your web application runs on one server and experiences high traffic, horizontal scaling would involve adding more servers to distribute the load across multiple machines.
 
 Key benefits:
 - Better fault tolerance by automatically replacing unhealthy instances
