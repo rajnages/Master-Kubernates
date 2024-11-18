@@ -1,0 +1,9 @@
+com\unicorn\store\StoreApplication.class
+com\unicorn\store\data\UnicornPublisher.class
+com\unicorn\store\exceptions\ResourceNotFoundException.class
+com\unicorn\store\model\Unicorn.class
+com\unicorn\store\service\UnicornService.class
+com\unicorn\store\controller\UnicornController.class
+com\unicorn\store\data\UnicornRepository.class
+com\unicorn\store\model\UnicornEventType.class
+com\unicorn\store\exceptions\PublisherException.class
