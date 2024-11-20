@@ -1,0 +1,48 @@
+# Namespace Definition
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-team
+  labels:
+    environment: development
+
+---
+# Resource Quota Definition
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: dev-team-resource-quota
+  namespace: dev-team
+spec:
+  hard:
+    pods: "10"                          # Maximum number of Pods
+    requests.cpu: "5"                   # Total CPU request limit
+    requests.memory: "10Gi"             # Total Memory request limit
+    limits.cpu: "10"                    # Total CPU limit
+    limits.memory: "20Gi"               # Total Memory limit
+    persistentvolumeclaims: "5"         # Maximum number of PVCs
+    configmaps: "10"                    # Maximum number of ConfigMaps
+    secrets: "10"                       # Maximum number of Secrets
+
+---
+# Limit Range Definition
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: dev-team-limit-range
+  namespace: dev-team
+spec:
+  limits:
+    - type: Container
+      default:
+        cpu: "500m"                     # Default CPU limit per container
+        memory: "512Mi"                 # Default Memory limit per container
+      defaultRequest:
+        cpu: "250m"                     # Default CPU request per container
+        memory: "256Mi"                 # Default Memory request per container
+      max:
+        cpu: "1"                        # Maximum CPU limit per container
+        memory: "1Gi"                   # Maximum Memory limit per container
+      min:
+        cpu: "100m"                     # Minimum CPU request per container
+        memory: "128Mi"                 # Minimum Memory request per container

@@ -1,0 +1,43 @@
+# INIT CONTAINERS same wise ADAPTER CONTAINERS
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: init-tasks
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: init-tasks
+  template:
+    metadata:
+      labels:
+        app: init-tasks
+    spec:
+      # Init container checks
+      initContainers:
+        - name: init-myservice
+          image: busybox
+          command: ["sh", "-c", "echo Init container running; sleep 5"]
+        - name: perform-task
+          image: busybox
+          command:
+            ["sh", "-c", 'echo "Init task is completed" > /tasks/task.txt']
+          volumeMounts:
+            - name: tasks-mount
+              mountPath: /tasks
+      # Main container store some where
+      containers:
+        - name: main-task
+          image: busybox
+          command:
+            [
+              "sh",
+              "-c",
+              'while true; do echo "Main container is running"; sleep 10; done',
+            ]
+          volumeMounts:
+            - name: tasks-mount
+              mountPath: /tasks
+      volumes:
+        - name: tasks-mount
+          emptyDir: {}

@@ -43,70 +43,70 @@ export CLUSTER_NAME=cloud-dev.xyz
 source ~/.bashrc
 
 #create cluster using kops we need domain name
-kops create cluster \
-    --name=${NAME} \
-    --cloud=aws \
-    --zones=us-east-1a,us-east-1b \
-    --master-size=t3.medium \
-    --node-size=t3.medium \
-    --node-count=2 \
-    --networking=calico \
-    --ssh-public-key=~/.ssh/id_rsa.pub \
-    --dry-run \
-    --output yaml > cluster-config.yaml
+# kops create cluster \
+#     --name=${NAME} \
+#     --cloud=aws \
+#     --zones=us-east-1a,us-east-1b \
+#     --master-size=t3.medium \
+#     --node-size=t3.medium \
+#     --node-count=2 \
+#     --networking=calico \
+#     --ssh-public-key=~/.ssh/id_rsa.pub \
+#     --dry-run \
+#     --output yaml > cluster-config.yaml
 
-# Smoke test commands after cluster creation
-kops create -f cluster.yaml
-kops update cluster --name rajnages.io.k8s.local --yes --admin
-kops validate cluster --wait 10m
-kops cluster info
-kops delete -f cluster.yml  --yes
+# # Smoke test commands after cluster creation
+# kops create -f cluster.yaml
+# kops update cluster --name cloud-dev.xyz --yes --admin
+# kops validate cluster --wait 10m
+# kops cluster info
+# kops delete -f cluster.yml  --yes
 
-#create eks cluster using eksctl
-eksctl create cluster --name=eksdemo \
-                     --region=us-east-1 \
-                     --zones=us-east-1a,us-east-1b \
-                     --nodegroup-name=eksdemo-ng \
-                     --node-type=t3.medium \
-                     --nodes=2 \
-                     --nodes-min=2 \
-                     --nodes-max=4 \
-                     --node-volume-size=20 \
-                     --ssh-access \
-                     --ssh-public-key=Manage-Key \
-                     --managed \
-                     --asg-access \
-                     --external-dns-access \
-                     --full-ecr-access \
-                     --appmesh-access \
-                     --alb-ingress-access
+# #create eks cluster using eksctl
+# eksctl create cluster --name=eksdemo \
+#                      --region=us-east-1 \
+#                      --zones=us-east-1a,us-east-1b \
+#                      --nodegroup-name=eksdemo-ng \
+#                      --node-type=t3.medium \
+#                      --nodes=2 \
+#                      --nodes-min=2 \
+#                      --nodes-max=4 \
+#                      --node-volume-size=20 \
+#                      --ssh-access \
+#                      --ssh-public-key=Manage-Key \
+#                      --managed \
+#                      --asg-access \
+#                      --external-dns-access \
+#                      --full-ecr-access \
+#                      --appmesh-access \
+#                      --alb-ingress-access
 
-# Get List of clusters
-eksctl get cluster                  
+# # Get List of clusters
+# eksctl get cluster                  
 
-# Smoke test commands after cluster creation
-kubectl get nodes -o wide
-kubectl get pods --all-namespaces
-kubectl cluster-info
-kubectl get svc
-eksctl get cluster --name eksdemo --region us-east-1
+# # Smoke test commands after cluster creation
+# kubectl get nodes -o wide
+# kubectl get pods --all-namespaces
+# kubectl cluster-info
+# kubectl get svc
+# eksctl get cluster --name eksdemo --region us-east-1
                
 
-kops create cluster \
-  --name=cloud-dev.xyz \
-  --state=s3://cloud-dev.xyz \
-  --zones=us-east-1a,us-east-1b \
-  --node-count=2 \
-  --control-plane-count=1 \           
-  --node-size=t3.medium \
-  --control-plane-size=t3.medium \    
-  --control-plane-zones=us-east-1a \  
-  --control-plane-volume-size=10 \    
-  --node-volume-size=10 \
-  --ssh-public-key=~/.ssh/id_ed25519.pub \
-  --dns-zone=cloud-dev.xyz \
-  --dry-run \
-  --output yaml > cluster-config.yaml
+# kops create cluster \
+#   --name=cloud-dev.xyz \
+#   --state=s3://cloud-dev.xyz \
+#   --zones=us-east-1a,us-east-1b \
+#   --node-count=2 \
+#   --control-plane-count=1 \           
+#   --node-size=t3.medium \
+#   --control-plane-size=t3.medium \    
+#   --control-plane-zones=us-east-1a \  
+#   --control-plane-volume-size=10 \    
+#   --node-volume-size=10 \
+#   --ssh-public-key=~/.ssh/id_ed25519.pub \
+#   --dns-zone=cloud-dev.xyz \
+#   --dry-run \
+#   --output yaml > cluster-config.yaml
 
 
 kops create cluster --name=cloud-dev.xyz \
@@ -119,22 +119,47 @@ kops create cluster --name=cloud-dev.xyz \
 
 
 # Get instance profile name for a specific EC2 instance
-aws ec2 describe-instances \
-    --instance-id i-0cb41d8cea0d15f7a \
-    --query 'Reservations[*].Instances[*].IamInstanceProfile.Arn' \
-    --output text
+# aws ec2 describe-instances \
+#     --instance-id i-0cb41d8cea0d15f7a \
+#     --query 'Reservations[*].Instances[*].IamInstanceProfile.Arn' \
+#     --output text
 
-# Get role details from instance profile
-aws iam list-instance-profiles \
-    --query 'InstanceProfiles[*].[InstanceProfileName,Roles[0].RoleName]' \
-    --output table
+# # Get role details from instance profile
+# aws iam list-instance-profiles \
+#     --query 'InstanceProfiles[*].[InstanceProfileName,Roles[0].RoleName]' \
+#     --output table
 
-# List policies attached to a role
-aws iam list-attached-role-policies \
-    --role-name kops-role
+# # List policies attached to a role
+# aws iam list-attached-role-policies \
+#     --role-name kops-role
 
-# Get inline policies
-aws iam list-role-policies \
-    --role-name YOUR_ROLE_NAME
+# # Get inline policies
+# aws iam list-role-policies \
+#     --role-name YOUR_ROLE_NAME
 
        
+####troubleshooting issues commands
+dig cloud-dev.xyz
+sudo vi /etc/resolv.conf
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+
+sudo systemctl disable systemd-resolved
+sudo systemctl stop systemd-resolved
+
+sudo vi /etc/hosts
+127.0.0.1   localhost
+127.0.0.1   ip-172-31-95-17
+
+sudo vi /etc/systemd/resolved.conf
+[Resolve]
+DNS=8.8.8.8 8.8.4.4
+FallbackDNS=8.8.8.8 8.8.4.4 1.1.1.1
+
+
+# whois cloud-dev.xyz
+# dig cloud-dev.xyz NS
+# dig @1.1.1.1 cloud-dev.xyz NS
+
+sudo systemctl restart systemd-resolved
+sudo systemctl status systemd-resolved
